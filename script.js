@@ -1,5 +1,5 @@
-/* global p, Hand, Bowl, riceRecipe, riceStep1,tmPose,createCapture,VIDEO,
-imageMode,CORNER,push,translate,scale,image,pop*/
+/* global p, Hand, Bowl, riceRecipe, eggRecipe, riceStep1,tmPose,createCapture,VIDEO,
+imageMode,CORNER,push,translate,scale,image,pop, currentRecipe*/
 
 /*
 COOKING MAMA PNGS
@@ -69,12 +69,29 @@ let colors;
 let juneGullFont;
 let loadingGif;
 
+let recipe;
+
 p.preload = function() {
-  juneGullFont = this.font = p.loadFont('https://cdn.glitch.com/10701851-ff16-4418-8942-e733d75bb5cb%2Fjunegull.ttf?v=1596033075561');
-  loadingGif = p.createImg('https://cdn.glitch.com/10701851-ff16-4418-8942-e733d75bb5cb%2Fnoodles-loading.gif?v=1596035832340');
+  juneGullFont = this.font = p.loadFont(
+    "https://cdn.glitch.com/10701851-ff16-4418-8942-e733d75bb5cb%2Fjunegull.ttf?v=1596033075561"
+  );
+  loadingGif = p.createImg(
+    "https://cdn.glitch.com/10701851-ff16-4418-8942-e733d75bb5cb%2Fnoodles-loading.gif?v=1596035832340"
+  );
 };
 
 p.setup = async function() {
+  switch (getRecipe()) {
+    case "rice":
+      recipe = riceRecipe;
+      break;
+    case "boiled eggs":
+      recipe = eggRecipe;
+      break;
+    default:
+      recipe = eggRecipe;
+  }
+
   // Code here runs once.
   const canvas = p.createCanvas(800, 800);
   p.colorMode(p.HSB, 360, 100, 100);
@@ -109,7 +126,7 @@ p.setup = async function() {
   // video = p.createCapture(p.VIDEO);
 
   //configure the chosen recipe
-  riceRecipe.configure();
+  recipe.configure();
 
   p.noLoop();
   await init();
@@ -125,7 +142,7 @@ p.draw = function() {
     p.background(backgroundColor);
 
     drawKitchen();
-    riceRecipe.handle();
+    recipe.handle();
 
     tick();
 
@@ -135,12 +152,17 @@ p.draw = function() {
   } else {
     displayLoadingScreen();
   }
-  
 };
+
+function getRecipe() {
+  let queryString = decodeURIComponent(window.location.search);
+  queryString = queryString.substring(8);
+  console.log(`Selected Recipe: ${queryString}`);
+  return queryString;
+}
 
 async function tick() {
   //display video
-  // p.scale(-1.0, 1.0); <-- not working, IDK why
   p.push();
   p.translate(videoWidth, 0);
   p.scale(-1, 1);
@@ -301,8 +323,8 @@ function displayLoadingScreen() {
   p.textSize(48);
   p.textFont(juneGullFont);
   p.textAlign(p.CENTER);
-  p.text('Loading...',p.width/2,300);
-  
-  loadingGif.position(150,150);
+  p.text("Loading...", p.width / 2, 300);
+
+  loadingGif.position(150, 150);
   p.pop();
 }

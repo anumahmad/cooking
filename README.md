@@ -1,5 +1,3 @@
-# Welcome to CSSI-Online
+# Fit Foodie
 
-This is the base template which already includes the `p5.js` library, the `p5.collide2d.js` library (commented out), and a connected `script.js`.
-
-Remember that if you need the collide library in your project, be sure to uncomment it in the `index.html`.
+This project was made at Google CSSI Online by Katrina, Hana, and Iris using Teachable Machine and p5.js.
