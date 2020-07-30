@@ -1,4 +1,4 @@
-/* global p, hand, juneGullFont, colors */
+/* global p, hand, juneGullFont, colors, mouseIsReleased, Button */
 
 class Recipe {
   constructor(steps,displayFinalDish,recipeName) {
@@ -9,6 +9,7 @@ class Recipe {
     this.complete = false;
     this.recipeName = recipeName;
     this.displayFinalDish = displayFinalDish;
+    this.backButton;
   }
 
   configure() {
@@ -19,6 +20,19 @@ class Recipe {
     }
     console.log("Done!");
     this.font = juneGullFont;
+    this.backButton = new Button(
+      /* x */ p.width / 2,
+      /* y */ 150,
+      /* w */ 200,
+      /* h */ 75,
+      /* text */ "HOME",
+      /* textSize */ 54,
+      /* textY */ 168,
+      function() {
+        window.location.href = "https://fitfoodie-cssi.glitch.me/index.html";
+        mouseIsReleased = false;
+      }
+    );
   }
 
   handle() {
@@ -50,7 +64,12 @@ class Recipe {
       hand.display();
       this.drawTextBox();
     } else {
-      p.push();
+      this.drawCongratsScreen();
+    }
+  }
+  
+  drawCongratsScreen() {
+    p.push();
       //border
       p.background(colors.LIGHT_BLUE);
       p.noStroke();
@@ -66,7 +85,7 @@ class Recipe {
       p.pop();
       //display completed dish
       this.displayFinalDish();
-    }
+      this.backButton.handle();
   }
 
   drawTextBox() {
